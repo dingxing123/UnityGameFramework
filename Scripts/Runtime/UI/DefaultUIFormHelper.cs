@@ -24,7 +24,7 @@ namespace UnityGameFramework.Runtime
         /// <returns>实例化后的界面。</returns>
         public override object InstantiateUIForm(object uiFormAsset)
         {
-            return Instantiate((Object)uiFormAsset);
+            return Instantiate((Object) uiFormAsset);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace UnityGameFramework.Runtime
             }
 
             Transform transform = gameObject.transform;
-            transform.SetParent(((MonoBehaviour)uiGroup.Helper).transform);
+            transform.SetParent(((MonoBehaviour) uiGroup.Helper).transform);
             transform.localScale = Vector3.one;
 
             return gameObject.GetOrAddComponent<UIForm>();
@@ -58,7 +58,7 @@ namespace UnityGameFramework.Runtime
         public override void ReleaseUIForm(object uiFormAsset, object uiFormInstance)
         {
             m_ResourceComponent.UnloadAsset(uiFormAsset);
-            Destroy((Object)uiFormInstance);
+            Destroy((Object) uiFormInstance);
         }
 
         private void Start()

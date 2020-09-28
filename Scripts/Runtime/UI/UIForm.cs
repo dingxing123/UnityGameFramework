@@ -22,7 +22,7 @@ namespace UnityGameFramework.Runtime
         private int m_DepthInUIGroup;
         private bool m_PauseCoveredUIForm;
         private UIFormLogic m_UIFormLogic;
-
+        
         /// <summary>
         /// 获取界面序列编号。
         /// </summary>
@@ -100,6 +100,35 @@ namespace UnityGameFramework.Runtime
             }
         }
 
+        #region Modify By cpd
+
+        private int m_UIFormId;
+        private bool m_IsRegister;
+        
+        /// <summary>
+        /// 获取界面配置Id
+        /// </summary>
+        public int UIFormId
+        {
+            get
+            {
+                return m_UIFormId;
+            }
+        }
+        
+        /// <summary>
+        /// 是否是注册界面
+        /// </summary>
+        public bool IsRegister
+        {
+            get
+            {
+                return m_IsRegister;
+            }
+        }
+        
+        #endregion
+
         /// <summary>
         /// 初始化界面。
         /// </summary>
@@ -173,6 +202,34 @@ namespace UnityGameFramework.Runtime
                 Log.Error("UI form '[{0}]{1}' OnOpen with exception '{2}'.", m_SerialId.ToString(), m_UIFormAssetName, exception.ToString());
             }
         }
+        
+        #region Modify By cpd
+        
+        /// <summary>
+        /// 界面打开。
+        /// </summary>
+        /// <param name="userData">用户自定义数据。</param>
+        public void OnOpen(object userData, int uiFormId)
+        {
+            m_UIFormId = uiFormId;
+            m_IsRegister = false;
+            
+            OnOpen(userData);
+        }
+        
+        /// <summary>
+        /// 界面打开。
+        /// </summary>
+        /// <param name="userData">用户自定义数据。</param>
+        public void OnOpen(object userData, int uiFormId, bool isRegister)
+        {
+            m_UIFormId = uiFormId;
+            m_IsRegister = isRegister;
+            
+            OnOpen(userData);
+        }
+        
+        #endregion
 
         /// <summary>
         /// 界面关闭。

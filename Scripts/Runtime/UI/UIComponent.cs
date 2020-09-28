@@ -58,6 +58,9 @@ namespace UnityGameFramework.Runtime
         [SerializeField]
         private Transform m_InstanceRoot = null;
 
+        [SerializeField] 
+        private Transform m_InputFormRoot;
+
         [SerializeField]
         private string m_UIFormHelperTypeName = "UnityGameFramework.Runtime.DefaultUIFormHelper";
 
@@ -72,6 +75,10 @@ namespace UnityGameFramework.Runtime
 
         [SerializeField]
         private UIGroup[] m_UIGroups = null;
+
+        public Transform InstanceRoot => m_InstanceRoot; // Modify By cpd
+
+        public Transform InputFormRoot => m_InputFormRoot;
 
         /// <summary>
         /// 获取界面组数量。
@@ -315,7 +322,7 @@ namespace UnityGameFramework.Runtime
 
             uiGroupHelper.name = Utility.Text.Format("UI Group - {0}", uiGroupName);
             uiGroupHelper.gameObject.layer = LayerMask.NameToLayer("UI");
-            Transform transform = uiGroupHelper.transform;
+            var transform = uiGroupHelper.transform;
             transform.SetParent(m_InstanceRoot);
             transform.localScale = Vector3.one;
 
@@ -584,6 +591,45 @@ namespace UnityGameFramework.Runtime
             return m_UIManager.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
         }
 
+        #region Modify By cpd
+
+        /// <summary>
+        /// 打开界面。
+        /// </summary>
+        /// <param name="uiFormAssetName">界面资源名称。</param>
+        /// <param name="uiGroupName">界面组名称。</param>
+        /// <param name="priority">加载界面资源的优先级。</param>
+        /// <param name="pauseCoveredUIForm">是否暂停被覆盖的界面。</param>
+        /// <param name="userData">用户自定义数据。</param>
+        /// <returns>界面的序列编号。</returns>
+        public int OpenUIForm(string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, object userData, int uiFormId)
+        {
+            return m_UIManager.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData, uiFormId);
+        }
+        
+        /// <summary>
+        /// 注册界面。
+        /// </summary>
+        /// <param name="uiFormAssetName"></param>
+        /// <param name="uiGroupName"></param>
+        /// <param name="priority"></param>
+        /// <param name="pauseCoveredUIForm"></param>
+        /// <param name="userData"></param>
+        public void RegisterUIForm(string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, object userData, int uiFormId)
+        {
+            m_UIManager.RegisterUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData, uiFormId);
+        }
+
+        /// <summary>
+        /// 释放所有未使用的界面。
+        /// </summary>
+        public void ReleaseAllUnusedUIForm()
+        {
+            m_UIManager.ReleaseAllUnusedUIForm();
+        }
+
+        #endregion
+        
         /// <summary>
         /// 关闭界面。
         /// </summary>

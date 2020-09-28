@@ -31,48 +31,73 @@ namespace UnityGameFramework.Runtime
         private EventComponent m_EventComponent = null;
         private AudioListener m_AudioListener = null;
 
-        [SerializeField]
-        private bool m_EnablePlaySoundUpdateEvent = false;
+        [SerializeField] private bool m_EnablePlaySoundUpdateEvent = false;
 
-        [SerializeField]
-        private bool m_EnablePlaySoundDependencyAssetEvent = false;
+        [SerializeField] private bool m_EnablePlaySoundDependencyAssetEvent = false;
 
-        [SerializeField]
-        private Transform m_InstanceRoot = null;
+        [SerializeField] private Transform m_InstanceRoot = null;
 
-        [SerializeField]
-        private AudioMixer m_AudioMixer = null;
+        [SerializeField] private AudioMixer m_AudioMixer = null;
 
-        [SerializeField]
-        private string m_SoundHelperTypeName = "UnityGameFramework.Runtime.DefaultSoundHelper";
+        [SerializeField] private string m_SoundHelperTypeName = "UnityGameFramework.Runtime.DefaultSoundHelper";
 
-        [SerializeField]
-        private SoundHelperBase m_CustomSoundHelper = null;
+        [SerializeField] private SoundHelperBase m_CustomSoundHelper = null;
 
-        [SerializeField]
-        private string m_SoundGroupHelperTypeName = "UnityGameFramework.Runtime.DefaultSoundGroupHelper";
+        [SerializeField] private string m_SoundGroupHelperTypeName = "UnityGameFramework.Runtime.DefaultSoundGroupHelper";
 
-        [SerializeField]
-        private SoundGroupHelperBase m_CustomSoundGroupHelper = null;
+        [SerializeField] private SoundGroupHelperBase m_CustomSoundGroupHelper = null;
 
-        [SerializeField]
-        private string m_SoundAgentHelperTypeName = "UnityGameFramework.Runtime.DefaultSoundAgentHelper";
+        [SerializeField] private string m_SoundAgentHelperTypeName = "UnityGameFramework.Runtime.DefaultSoundAgentHelper";
 
-        [SerializeField]
-        private SoundAgentHelperBase m_CustomSoundAgentHelper = null;
+        [SerializeField] private SoundAgentHelperBase m_CustomSoundAgentHelper = null;
 
-        [SerializeField]
-        private SoundGroup[] m_SoundGroups = null;
+        [SerializeField] private SoundGroup[] m_SoundGroups = null;
+
+        #region Modify By cpd
+
+        /// <summary>
+        /// 声音的生命周期<soundId, soundLifeTime>,表示同一SoundId隔多久可以再次播放 
+        /// </summary>
+        private Dictionary<int, float> _soundLifecycleDic = new Dictionary<int, float>();
+
+        private List<int> _tempSoundLifecycleList = new List<int>(); // 存放需要删除的sound临时List
+
+        /// <summary>
+        /// 同一声音间隔时间
+        /// </summary>
+        public Dictionary<int, float> SoundLifecycleDic
+        {
+            get { return _soundLifecycleDic; }
+        }
+
+        private void Update()
+        {
+            // 检测Sounds的生命周期
+            if (_soundLifecycleDic.Count > 0)
+            {
+                _tempSoundLifecycleList.AddRange(_soundLifecycleDic.Keys);
+                for (int i = 0; i < _tempSoundLifecycleList.Count; i++)
+                {
+                    var soundId = _tempSoundLifecycleList[i];
+                    _soundLifecycleDic[soundId] -= Time.deltaTime;
+                    if (_soundLifecycleDic[soundId] <= 0)
+                    {
+                        _soundLifecycleDic.Remove(soundId);
+                    }
+                }
+
+                _tempSoundLifecycleList.Clear();
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// 获取声音组数量。
         /// </summary>
         public int SoundGroupCount
         {
-            get
-            {
-                return m_SoundManager.SoundGroupCount;
-            }
+            get { return m_SoundManager.SoundGroupCount; }
         }
 
         /// <summary>
@@ -80,10 +105,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         public AudioMixer AudioMixer
         {
-            get
-            {
-                return m_AudioMixer;
-            }
+            get { return m_AudioMixer; }
         }
 
         /// <summary>
@@ -612,10 +634,10 @@ namespace UnityGameFramework.Runtime
 
         private void OnPlaySoundSuccess(object sender, GameFramework.Sound.PlaySoundSuccessEventArgs e)
         {
-            PlaySoundInfo playSoundInfo = (PlaySoundInfo)e.UserData;
+            PlaySoundInfo playSoundInfo = (PlaySoundInfo) e.UserData;
             if (playSoundInfo != null)
             {
-                SoundAgentHelperBase soundAgentHelper = (SoundAgentHelperBase)e.SoundAgent.Helper;
+                SoundAgentHelperBase soundAgentHelper = (SoundAgentHelperBase) e.SoundAgent.Helper;
                 if (playSoundInfo.BindingEntity != null)
                 {
                     soundAgentHelper.SetBindingEntity(playSoundInfo.BindingEntity);

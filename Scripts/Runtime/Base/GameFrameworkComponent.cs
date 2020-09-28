@@ -21,5 +21,17 @@ namespace UnityGameFramework.Runtime
         {
             GameEntry.RegisterComponent(this);
         }
+
+        #region Modify By cpd
+
+        /// <summary>
+        /// 清理
+        /// </summary>
+        public virtual void Clean()
+        {
+            
+        }
+
+        #endregion
     }
 }

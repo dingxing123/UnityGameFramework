@@ -144,5 +144,21 @@ namespace UnityGameFramework.Runtime
         {
             return m_ProcedureManager.GetProcedure(procedureType);
         }
+        
+        #region Modify By cpd
+        
+        /// <summary>
+        /// 获取流程状态机。
+        /// </summary>
+        /// <exception cref="GameFrameworkException"></exception>
+        public IFsm<IProcedureManager> CurrentProcedureFsm
+        {
+            get
+            {
+                return m_ProcedureManager.CurrentProcedureFsm;
+            }
+        }
+        
+        #endregion
     }
 }

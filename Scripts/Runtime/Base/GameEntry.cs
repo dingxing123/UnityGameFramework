@@ -32,7 +32,7 @@ namespace UnityGameFramework.Runtime
         /// <returns>要获取的游戏框架组件。</returns>
         public static T GetComponent<T>() where T : GameFrameworkComponent
         {
-            return (T)GetComponent(typeof(T));
+            return (T) GetComponent(typeof(T));
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace UnityGameFramework.Runtime
 
             return null;
         }
-
+        
         /// <summary>
         /// 关闭游戏框架。
         /// </summary>
@@ -143,5 +143,18 @@ namespace UnityGameFramework.Runtime
 
             s_GameFrameworkComponents.AddLast(gameFrameworkComponent);
         }
+
+        #region Modify By cpd
+
+        /// <summary>
+        /// 获取所有组件
+        /// </summary>
+        /// <returns></returns>
+        public static GameFrameworkLinkedList<GameFrameworkComponent> GetComponents()
+        {
+            return s_GameFrameworkComponents;
+        }
+
+        #endregion
     }
 }

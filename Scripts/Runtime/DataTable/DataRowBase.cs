@@ -18,7 +18,7 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 获取数据表行的编号。
         /// </summary>
-        public abstract int Id
+        public abstract long Id
         {
             get;
         }

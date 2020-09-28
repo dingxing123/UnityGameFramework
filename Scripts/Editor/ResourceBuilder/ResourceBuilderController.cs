@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2020 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -940,6 +940,13 @@ namespace UnityGameFramework.Editor.ResourceTools
             {
                 VersionListData versionListData = ProcessUpdatableVersionList(outputFullPath, platform);
                 m_BuildReport.LogInfo("Process updatable version list for '{0}' complete, updatable version list path is '{1}', length is '{2}', hash code is '{3}[0x{3:X8}]', zip length is '{4}', zip hash code is '{5}[0x{5:X8}]'.", platformName, versionListData.Path, versionListData.Length.ToString(), versionListData.HashCode, versionListData.ZipLength.ToString(), versionListData.ZipHashCode);
+
+                #region Modify By cpd
+
+                SaveBranchInfo();
+                SaveVersion(platformName, versionListData);
+
+                #endregion
             }
 
             if (OutputPackedSelected)
@@ -1502,5 +1509,72 @@ namespace UnityGameFramework.Editor.ResourceTools
 
             return DefaultExtension;
         }
+
+        #region Modify By cpd
+        
+        public string Branch { get; set; }
+        public string BuildInfoFilePath { get; set; }
+        
+        public class VersionInfo
+        {
+            public bool GameUpdate { get; set; }
+            public string LatestGameVersion { get; set; }
+            public int InternalGameVersion { get; set; }
+            public int InternalResourceVersion { get; set; }
+            public int VersionListLength { get; set; }
+            public int VersionListHashCode { get; set; }
+            public int VersionListZipLength { get; set; }
+            public int VersionListZipHashCode { get; set; }
+        }
+        
+        public class BuildInfo
+        {
+            public string GameVersion { get; set; }
+            public int InternalGameVersion { get; set; }
+            public string CheckVersionUrl { get; set; }
+            public string StandaloneAppUrl { get; set; }
+            public string Branch { get; set; }
+            public string Version { get; set; }
+            public string IosAppUrl { get; set; }
+            public string AndroidAppUrl { get; set; }
+        }
+        
+        private void SaveVersion(string platformName, VersionListData data)
+        {
+            string versionPath = Path.Combine(OutputDirectory, string.Format("{0}_{1}_{2}.txt", "version", InternalResourceVersion, platformName.ToLower()));
+            VersionInfo version = new VersionInfo();
+            version.GameUpdate = false;
+            version.LatestGameVersion = ApplicableGameVersion.ToString();
+            version.InternalResourceVersion = InternalResourceVersion;
+            version.VersionListLength = data.Length;
+            version.VersionListHashCode = data.HashCode;
+            version.VersionListZipLength = data.ZipLength;
+            version.VersionListZipHashCode = data.ZipHashCode;
+
+            if (File.Exists(versionPath))
+            {
+                File.Delete(versionPath);
+            }
+
+            File.WriteAllText(versionPath, LitJson.JsonMapper.ToJson(version));
+        }
+        
+        private void SaveBranchInfo()
+        {
+            var readAllText = File.ReadAllText(BuildInfoFilePath);
+            var buildInfoJson = LitJson.JsonMapper.ToObject<BuildInfo>(readAllText);
+            buildInfoJson.Branch = Branch;
+            File.WriteAllText(BuildInfoFilePath, LitJson.JsonMapper.ToJson(buildInfoJson));
+        }
+
+        public static void SaveVersionInfo(string path, string version)
+        {
+            var readAllText = File.ReadAllText(path);
+            var buildInfoJson = LitJson.JsonMapper.ToObject<BuildInfo>(readAllText);
+            buildInfoJson.Version = version;
+            File.WriteAllText(path, LitJson.JsonMapper.ToJson(buildInfoJson));
+        }
+
+        #endregion
     }
 }
