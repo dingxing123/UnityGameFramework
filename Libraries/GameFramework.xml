@@ -41,6 +41,17 @@
             读取数据时加载依赖资源事件。
             </summary>
         </member>
+        <member name="M:GameFramework.DataProvider`1.EnsureCachedBytesSize(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.DataProvider`1.FreeCachedBytes">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
+        </member>
         <member name="M:GameFramework.DataProvider`1.ReadData(System.String)">
             <summary>
             读取数据。
@@ -130,21 +141,30 @@
             </summary>
             <param name="dataProviderHelper">数据提供者辅助器。</param>
         </member>
-        <member name="M:GameFramework.DataProvider`1.EnsureCachedBytesSize(System.Int32)">
-            <summary>
-            确保二进制流缓存分配足够大小的内存并缓存。
-            </summary>
-            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
-        </member>
         <member name="T:GameFramework.DataProviderCreator">
             <summary>
             数据提供者创建器。
             </summary>
         </member>
-        <member name="P:GameFramework.DataProviderCreator.CachedBytesSize">
+        <member name="M:GameFramework.DataProviderCreator.GetCachedBytesSize``1">
             <summary>
             获取缓冲二进制流的大小。
             </summary>
+            <typeparam name="T">数据提供者的持有者的类型。</typeparam>
+            <returns>缓冲二进制流的大小。</returns>
+        </member>
+        <member name="M:GameFramework.DataProviderCreator.EnsureCachedBytesSize``1(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <typeparam name="T">数据提供者的持有者的类型。</typeparam>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.DataProviderCreator.FreeCachedBytes``1">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
+            <typeparam name="T">数据提供者的持有者的类型。</typeparam>
         </member>
         <member name="M:GameFramework.DataProviderCreator.Create``1(``0,GameFramework.Resource.IResourceManager,GameFramework.IDataProviderHelper{``0})">
             <summary>
@@ -1565,12 +1585,6 @@
             获取一个值，该值指示是否同步对 ICollection 的访问（线程安全）。
             </summary>
         </member>
-        <member name="M:GameFramework.GameFrameworkLinkedList`1.Add(`0)">
-            <summary>
-            将值添加到 ICollection`1 的结尾处。
-            </summary>
-            <param name="value">要添加的值。</param>
-        </member>
         <member name="M:GameFramework.GameFrameworkLinkedList`1.AddAfter(System.Collections.Generic.LinkedListNode{`0},`0)">
             <summary>
             在链表中指定的现有结点后添加包含指定值的新结点。
@@ -1700,6 +1714,12 @@
             返回循环访问集合的枚举数。
             </summary>
             <returns>循环访问集合的枚举数。</returns>
+        </member>
+        <member name="M:GameFramework.GameFrameworkLinkedList`1.System#Collections#Generic#ICollection{T}#Add(`0)">
+            <summary>
+            将值添加到 ICollection`1 的结尾处。
+            </summary>
+            <param name="value">要添加的值。</param>
         </member>
         <member name="M:GameFramework.GameFrameworkLinkedList`1.System#Collections#Generic#IEnumerable{T}#GetEnumerator">
             <summary>
@@ -1994,7 +2014,7 @@
             <summary>
             序列化回调函数。
             </summary>
-            <param name="binaryWriter">目标流。</param>
+            <param name="stream">目标流。</param>
             <param name="data">要序列化的数据。</param>
             <returns>是否序列化数据成功。</returns>
         </member>
@@ -2002,14 +2022,14 @@
             <summary>
             反序列化回调函数。
             </summary>
-            <param name="binaryReader">指定流。</param>
+            <param name="stream">指定流。</param>
             <returns>反序列化的数据。</returns>
         </member>
         <member name="T:GameFramework.GameFrameworkSerializer`1.TryGetValueCallback">
             <summary>
             尝试从指定流获取指定键的值回调函数。
             </summary>
-            <param name="binaryReader">指定流。</param>
+            <param name="stream">指定流。</param>
             <param name="key">指定键。</param>
             <param name="value">指定键的值。</param>
             <returns>是否从指定流获取指定键的值成功。</returns>
@@ -2745,12 +2765,6 @@
             初始化变量的新实例。
             </summary>
         </member>
-        <member name="M:GameFramework.Variable`1.#ctor(`0)">
-            <summary>
-            初始化变量的新实例。
-            </summary>
-            <param name="value">初始值。</param>
-        </member>
         <member name="P:GameFramework.Variable`1.Type">
             <summary>
             获取变量类型。
@@ -2773,9 +2787,9 @@
             </summary>
             <param name="value">变量值。</param>
         </member>
-        <member name="M:GameFramework.Variable`1.Reset">
+        <member name="M:GameFramework.Variable`1.Clear">
             <summary>
-            重置变量值。
+            清理变量值。
             </summary>
         </member>
         <member name="M:GameFramework.Variable`1.ToString">
@@ -2811,9 +2825,9 @@
             </summary>
             <param name="value">变量值。</param>
         </member>
-        <member name="M:GameFramework.Variable.Reset">
+        <member name="M:GameFramework.Variable.Clear">
             <summary>
-            重置变量值。
+            清理变量值。
             </summary>
         </member>
         <member name="T:GameFramework.Version">
@@ -2872,6 +2886,11 @@
             获取全局配置项数量。
             </summary>
         </member>
+        <member name="P:GameFramework.Config.ConfigManager.CachedBytesSize">
+            <summary>
+            获取缓冲二进制流的大小。
+            </summary>
+        </member>
         <member name="E:GameFramework.Config.ConfigManager.ReadDataSuccess">
             <summary>
             读取全局配置成功事件。
@@ -2921,6 +2940,17 @@
             设置全局配置辅助器。
             </summary>
             <param name="configHelper">全局配置辅助器。</param>
+        </member>
+        <member name="M:GameFramework.Config.ConfigManager.EnsureCachedBytesSize(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.Config.ConfigManager.FreeCachedBytes">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
         </member>
         <member name="M:GameFramework.Config.ConfigManager.ReadData(System.String)">
             <summary>
@@ -3111,6 +3141,11 @@
             获取全局配置项数量。
             </summary>
         </member>
+        <member name="P:GameFramework.Config.IConfigManager.CachedBytesSize">
+            <summary>
+            获取缓冲二进制流的大小。
+            </summary>
+        </member>
         <member name="M:GameFramework.Config.IConfigManager.SetResourceManager(GameFramework.Resource.IResourceManager)">
             <summary>
             设置资源管理器。
@@ -3128,6 +3163,17 @@
             设置全局配置辅助器。
             </summary>
             <param name="configHelper">全局配置辅助器。</param>
+        </member>
+        <member name="M:GameFramework.Config.IConfigManager.EnsureCachedBytesSize(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.Config.IConfigManager.FreeCachedBytes">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
         </member>
         <member name="M:GameFramework.Config.IConfigManager.HasConfig(System.String)">
             <summary>
@@ -3961,6 +4007,11 @@
             获取数据表数量。
             </summary>
         </member>
+        <member name="P:GameFramework.DataTable.DataTableManager.CachedBytesSize">
+            <summary>
+            获取缓冲二进制流的大小。
+            </summary>
+        </member>
         <member name="M:GameFramework.DataTable.DataTableManager.Update(System.Single,System.Single)">
             <summary>
             数据表管理器轮询。
@@ -3990,6 +4041,17 @@
             设置数据表辅助器。
             </summary>
             <param name="dataTableHelper">数据表辅助器。</param>
+        </member>
+        <member name="M:GameFramework.DataTable.DataTableManager.EnsureCachedBytesSize(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.DataTable.DataTableManager.FreeCachedBytes">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
         </member>
         <member name="M:GameFramework.DataTable.DataTableManager.HasDataTable``1">
             <summary>
@@ -4508,6 +4570,11 @@
             获取数据表数量。
             </summary>
         </member>
+        <member name="P:GameFramework.DataTable.IDataTableManager.CachedBytesSize">
+            <summary>
+            获取缓冲二进制流的大小。
+            </summary>
+        </member>
         <member name="M:GameFramework.DataTable.IDataTableManager.SetResourceManager(GameFramework.Resource.IResourceManager)">
             <summary>
             设置资源管理器。
@@ -4525,6 +4592,17 @@
             设置数据表辅助器。
             </summary>
             <param name="dataTableHelper">数据表辅助器。</param>
+        </member>
+        <member name="M:GameFramework.DataTable.IDataTableManager.EnsureCachedBytesSize(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.DataTable.IDataTableManager.FreeCachedBytes">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
         </member>
         <member name="M:GameFramework.DataTable.IDataTableManager.HasDataTable``1">
             <summary>
@@ -6067,33 +6145,54 @@
             <param name="childEntity">要获取父实体的子实体。</param>
             <returns>子实体的父实体。</returns>
         </member>
-        <member name="M:GameFramework.Entity.EntityManager.GetChildEntities(System.Int32)">
+        <member name="M:GameFramework.Entity.EntityManager.GetChildEntityCount(System.Int32)">
+            <summary>
+            获取子实体数量。
+            </summary>
+            <param name="parentEntityId">要获取子实体数量的父实体的实体编号。</param>
+            <returns>子实体数量。</returns>
+        </member>
+        <member name="M:GameFramework.Entity.EntityManager.GetChildEntity(System.Int32)">
             <summary>
             获取子实体。
             </summary>
             <param name="parentEntityId">要获取子实体的父实体的实体编号。</param>
-            <returns>子实体数组。</returns>
+            <returns>子实体。</returns>
+        </member>
+        <member name="M:GameFramework.Entity.EntityManager.GetChildEntity(GameFramework.Entity.IEntity)">
+            <summary>
+            获取子实体。
+            </summary>
+            <param name="parentEntity">要获取子实体的父实体。</param>
+            <returns>子实体。</returns>
+        </member>
+        <member name="M:GameFramework.Entity.EntityManager.GetChildEntities(System.Int32)">
+            <summary>
+            获取所有子实体。
+            </summary>
+            <param name="parentEntityId">要获取所有子实体的父实体的实体编号。</param>
+            <returns>所有子实体。</returns>
         </member>
         <member name="M:GameFramework.Entity.EntityManager.GetChildEntities(System.Int32,System.Collections.Generic.List{GameFramework.Entity.IEntity})">
             <summary>
-            获取子实体。
+            获取所有子实体。
             </summary>
-            <param name="parentEntityId">要获取子实体的父实体的实体编号。</param>
-            <param name="results">子实体数组。</param>
+            <param name="parentEntityId">要获取所有子实体的父实体的实体编号。</param>
+            <param name="results">所有子实体。</param>
         </member>
         <member name="M:GameFramework.Entity.EntityManager.GetChildEntities(GameFramework.Entity.IEntity)">
             <summary>
-            获取子实体。
+            获取所有子实体。
             </summary>
-            <param name="parentEntity">要获取子实体的父实体。</param>
-            <returns>子实体数组。</returns>
+            <param name="parentEntity">要获取所有子实体的父实体。</param>
+            <returns>所有子实体。</returns>
         </member>
         <member name="M:GameFramework.Entity.EntityManager.GetChildEntities(GameFramework.Entity.IEntity,System.Collections.Generic.List{GameFramework.Entity.IEntity})">
             <summary>
-            获取子实体。
+            获取所有子实体。
             </summary>
-            <param name="parentEntity">要获取子实体的父实体。</param>
-            <param name="results">子实体数组。</param>
+            <param name="parentEntity">要获取所有子实体的父实体。</param>
+            <param name="results">所有子实体。</param>
         </member>
         <member name="M:GameFramework.Entity.EntityManager.AttachEntity(System.Int32,System.Int32)">
             <summary>
@@ -6896,33 +6995,54 @@
             <param name="childEntity">要获取父实体的子实体。</param>
             <returns>子实体的父实体。</returns>
         </member>
-        <member name="M:GameFramework.Entity.IEntityManager.GetChildEntities(System.Int32)">
+        <member name="M:GameFramework.Entity.IEntityManager.GetChildEntityCount(System.Int32)">
+            <summary>
+            获取子实体数量。
+            </summary>
+            <param name="parentEntityId">要获取子实体数量的父实体的实体编号。</param>
+            <returns>子实体数量。</returns>
+        </member>
+        <member name="M:GameFramework.Entity.IEntityManager.GetChildEntity(System.Int32)">
             <summary>
             获取子实体。
             </summary>
             <param name="parentEntityId">要获取子实体的父实体的实体编号。</param>
-            <returns>子实体数组。</returns>
+            <returns>子实体。</returns>
+        </member>
+        <member name="M:GameFramework.Entity.IEntityManager.GetChildEntity(GameFramework.Entity.IEntity)">
+            <summary>
+            获取子实体。
+            </summary>
+            <param name="parentEntity">要获取子实体的父实体。</param>
+            <returns>子实体。</returns>
+        </member>
+        <member name="M:GameFramework.Entity.IEntityManager.GetChildEntities(System.Int32)">
+            <summary>
+            获取所有子实体。
+            </summary>
+            <param name="parentEntityId">要获取所有子实体的父实体的实体编号。</param>
+            <returns>所有子实体。</returns>
         </member>
         <member name="M:GameFramework.Entity.IEntityManager.GetChildEntities(System.Int32,System.Collections.Generic.List{GameFramework.Entity.IEntity})">
             <summary>
-            获取子实体。
+            获取所有子实体。
             </summary>
-            <param name="parentEntityId">要获取子实体的父实体的实体编号。</param>
-            <param name="results">子实体数组。</param>
+            <param name="parentEntityId">要获取所有子实体的父实体的实体编号。</param>
+            <param name="results">所有子实体。</param>
         </member>
         <member name="M:GameFramework.Entity.IEntityManager.GetChildEntities(GameFramework.Entity.IEntity)">
             <summary>
-            获取子实体。
+            获取所有子实体。
             </summary>
-            <param name="parentEntity">要获取子实体的父实体。</param>
-            <returns>子实体数组。</returns>
+            <param name="parentEntity">要获取所有子实体的父实体。</param>
+            <returns>所有子实体。</returns>
         </member>
         <member name="M:GameFramework.Entity.IEntityManager.GetChildEntities(GameFramework.Entity.IEntity,System.Collections.Generic.List{GameFramework.Entity.IEntity})">
             <summary>
-            获取子实体。
+            获取所有子实体。
             </summary>
-            <param name="parentEntity">要获取子实体的父实体。</param>
-            <param name="results">子实体数组。</param>
+            <param name="parentEntity">要获取所有子实体的父实体。</param>
+            <param name="results">所有子实体。</param>
         </member>
         <member name="M:GameFramework.Entity.IEntityManager.AttachEntity(System.Int32,System.Int32)">
             <summary>
@@ -9182,6 +9302,11 @@
             获取字典数量。
             </summary>
         </member>
+        <member name="P:GameFramework.Localization.ILocalizationManager.CachedBytesSize">
+            <summary>
+            获取缓冲二进制流的大小。
+            </summary>
+        </member>
         <member name="M:GameFramework.Localization.ILocalizationManager.SetResourceManager(GameFramework.Resource.IResourceManager)">
             <summary>
             设置资源管理器。
@@ -9199,6 +9324,17 @@
             设置本地化辅助器。
             </summary>
             <param name="localizationHelper">本地化辅助器。</param>
+        </member>
+        <member name="M:GameFramework.Localization.ILocalizationManager.EnsureCachedBytesSize(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.Localization.ILocalizationManager.FreeCachedBytes">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
         </member>
         <member name="M:GameFramework.Localization.ILocalizationManager.GetString(System.String)">
             <summary>
@@ -9561,6 +9697,11 @@
             获取字典数量。
             </summary>
         </member>
+        <member name="P:GameFramework.Localization.LocalizationManager.CachedBytesSize">
+            <summary>
+            获取缓冲二进制流的大小。
+            </summary>
+        </member>
         <member name="E:GameFramework.Localization.LocalizationManager.ReadDataSuccess">
             <summary>
             读取字典成功事件。
@@ -9610,6 +9751,17 @@
             设置本地化辅助器。
             </summary>
             <param name="localizationHelper">本地化辅助器。</param>
+        </member>
+        <member name="M:GameFramework.Localization.LocalizationManager.EnsureCachedBytesSize(System.Int32)">
+            <summary>
+            确保二进制流缓存分配足够大小的内存并缓存。
+            </summary>
+            <param name="ensureSize">要确保二进制流缓存分配内存的大小。</param>
+        </member>
+        <member name="M:GameFramework.Localization.LocalizationManager.FreeCachedBytes">
+            <summary>
+            释放缓存的二进制流。
+            </summary>
         </member>
         <member name="M:GameFramework.Localization.LocalizationManager.ReadData(System.String)">
             <summary>
@@ -10707,6 +10859,20 @@
             </summary>
             <param name="target">要设置优先级的对象。</param>
             <param name="priority">优先级。</param>
+        </member>
+        <member name="M:GameFramework.ObjectPool.IObjectPool`1.ReleaseObject(`0)">
+            <summary>
+            释放对象。
+            </summary>
+            <param name="obj">要释放的对象。</param>
+            <returns>释放对象是否成功。</returns>
+        </member>
+        <member name="M:GameFramework.ObjectPool.IObjectPool`1.ReleaseObject(System.Object)">
+            <summary>
+            释放对象。
+            </summary>
+            <param name="target">要释放的对象。</param>
+            <returns>释放对象是否成功。</returns>
         </member>
         <member name="M:GameFramework.ObjectPool.IObjectPool`1.Release">
             <summary>
@@ -12680,6 +12846,20 @@
             <param name="target">要设置优先级的对象。</param>
             <param name="priority">优先级。</param>
         </member>
+        <member name="M:GameFramework.ObjectPool.ObjectPoolManager.ObjectPool`1.ReleaseObject(`0)">
+            <summary>
+            释放对象。
+            </summary>
+            <param name="obj">要释放的对象。</param>
+            <returns>释放对象是否成功。</returns>
+        </member>
+        <member name="M:GameFramework.ObjectPool.ObjectPoolManager.ObjectPool`1.ReleaseObject(System.Object)">
+            <summary>
+            释放对象。
+            </summary>
+            <param name="target">要释放的对象。</param>
+            <returns>释放对象是否成功。</returns>
+        </member>
         <member name="M:GameFramework.ObjectPool.ObjectPoolManager.ObjectPool`1.Release">
             <summary>
             释放对象池中的可释放对象。
@@ -13483,7 +13663,7 @@
         </member>
         <member name="M:GameFramework.Resource.IResourceManager.UpdateResources(GameFramework.Resource.UpdateResourcesCompleteCallback)">
             <summary>
-            使用可更新模式并更新全部资源。
+            使用可更新模式并更新所有资源。
             </summary>
             <param name="updateResourcesCompleteCallback">使用可更新模式并更新默认资源组完成时的回调函数。</param>
         </member>
@@ -15135,7 +15315,7 @@
         </member>
         <member name="M:GameFramework.Resource.ResourceManager.UpdateResources(GameFramework.Resource.UpdateResourcesCompleteCallback)">
             <summary>
-            使用可更新模式并更新全部资源。
+            使用可更新模式并更新所有资源。
             </summary>
             <param name="updateResourcesCompleteCallback">使用可更新模式并更新默认资源组完成时的回调函数。</param>
         </member>
@@ -22004,11 +22184,6 @@
             Marshal 相关的实用函数。
             </summary>
         </member>
-        <member name="P:GameFramework.Utility.Marshal.CachedHGlobalPtr">
-            <summary>
-            获取缓存的指向从进程的非托管内存中分配的内存的指针。
-            </summary>
-        </member>
         <member name="P:GameFramework.Utility.Marshal.CachedHGlobalSize">
             <summary>
             获取缓存的从进程的非托管内存中分配的内存的大小。
@@ -22113,27 +22288,6 @@
             <param name="buffer">要转换的二进制流。</param>
             <param name="startIndex">读取要转换的二进制流的起始位置。</param>
             <returns>存储转换结果的对象。</returns>
-        </member>
-        <member name="T:GameFramework.Utility.Nullable">
-            <summary>
-            可空类型相关的实用函数。
-            </summary>
-        </member>
-        <member name="M:GameFramework.Utility.Nullable.IsNullable``1(``0)">
-            <summary>
-            获取对象是否是可空类型。
-            </summary>
-            <typeparam name="T">对象类型。</typeparam>
-            <param name="t">对象。</param>
-            <returns>对象是否是可空类型。</returns>
-        </member>
-        <member name="M:GameFramework.Utility.Nullable.IsNullable``1(System.Nullable{``0})">
-            <summary>
-            获取对象是否是可空类型。
-            </summary>
-            <typeparam name="T">对象类型。</typeparam>
-            <param name="t">对象。</param>
-            <returns>对象是否是可空类型。</returns>
         </member>
         <member name="T:GameFramework.Utility.Path">
             <summary>

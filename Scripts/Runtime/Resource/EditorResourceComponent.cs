@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------
 // Game Framework
-// Copyright © 2013-2020 Jiang Yin. All rights reserved.
+// Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
@@ -13,6 +13,7 @@ using GameFramework.Resource;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -841,7 +842,7 @@ namespace UnityGameFramework.Runtime
         }
 
         /// <summary>
-        /// 使用可更新模式并更新全部资源。
+        /// 使用可更新模式并更新所有资源。
         /// </summary>
         /// <param name="updateResourcesCompleteCallback">使用可更新模式并更新默认资源组完成时的回调函数。</param>
         public void UpdateResources(UpdateResourcesCompleteCallback updateResourcesCompleteCallback)
@@ -1573,6 +1574,7 @@ namespace UnityGameFramework.Runtime
             return null;
         }
 
+        [StructLayout(LayoutKind.Auto)]
         private struct LoadAssetInfo
         {
             private readonly string m_AssetName;
@@ -1651,6 +1653,7 @@ namespace UnityGameFramework.Runtime
             }
         }
 
+        [StructLayout(LayoutKind.Auto)]
         private struct LoadSceneInfo
         {
             private readonly AsyncOperation m_AsyncOperation;
@@ -1719,6 +1722,7 @@ namespace UnityGameFramework.Runtime
             }
         }
 
+        [StructLayout(LayoutKind.Auto)]
         private struct UnloadSceneInfo
         {
             private readonly AsyncOperation m_AsyncOperation;
