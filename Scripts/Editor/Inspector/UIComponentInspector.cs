@@ -23,7 +23,7 @@ namespace UnityGameFramework.Editor
         private SerializedProperty m_InstanceExpireTime = null;
         private SerializedProperty m_InstancePriority = null;
         private SerializedProperty m_InstanceRoot = null;
-        private SerializedProperty m_InputFormRoot = null;
+        private SerializedProperty m_UICamera = null;
         private SerializedProperty m_UIGroups = null;
 
         private HelperInfo<UIFormHelperBase> m_UIFormHelperInfo = new HelperInfo<UIFormHelperBase>("UIForm");
@@ -102,7 +102,7 @@ namespace UnityGameFramework.Editor
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
                 EditorGUILayout.PropertyField(m_InstanceRoot);
-                EditorGUILayout.PropertyField(m_InputFormRoot);
+                EditorGUILayout.PropertyField(m_UICamera);
                 m_UIFormHelperInfo.Draw();
                 m_UIGroupHelperInfo.Draw();
                 EditorGUILayout.PropertyField(m_UIGroups, true);
@@ -138,7 +138,7 @@ namespace UnityGameFramework.Editor
             m_InstanceExpireTime = serializedObject.FindProperty("m_InstanceExpireTime");
             m_InstancePriority = serializedObject.FindProperty("m_InstancePriority");
             m_InstanceRoot = serializedObject.FindProperty("m_InstanceRoot");
-            m_InputFormRoot = serializedObject.FindProperty("m_InputFormRoot");
+            m_UICamera = serializedObject.FindProperty("m_UICamera");
             m_UIGroups = serializedObject.FindProperty("m_UIGroups");
 
             m_UIFormHelperInfo.Init(serializedObject);

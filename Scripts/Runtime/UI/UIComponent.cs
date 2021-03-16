@@ -57,9 +57,9 @@ namespace UnityGameFramework.Runtime
 
         [SerializeField]
         private Transform m_InstanceRoot = null;
-
+        
         [SerializeField] 
-        private Transform m_InputFormRoot;
+        private Camera m_UICamera = null;
 
         [SerializeField]
         private string m_UIFormHelperTypeName = "UnityGameFramework.Runtime.DefaultUIFormHelper";
@@ -77,8 +77,8 @@ namespace UnityGameFramework.Runtime
         private UIGroup[] m_UIGroups = null;
 
         public Transform InstanceRoot => m_InstanceRoot; // Modify By cpd
-
-        public Transform InputFormRoot => m_InputFormRoot;
+        
+        public Camera UICamera => m_UICamera; // Modify By cpd
 
         /// <summary>
         /// 获取界面组数量。
@@ -639,6 +639,11 @@ namespace UnityGameFramework.Runtime
             m_UIManager.CloseUIForm(serialId);
         }
 
+        public void RealCloseUIForm(int serialId, object userData)
+        {
+            m_UIManager.RealCloseUIForm(serialId, userData);
+        }
+        
         /// <summary>
         /// 关闭界面。
         /// </summary>

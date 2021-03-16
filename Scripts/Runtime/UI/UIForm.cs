@@ -249,6 +249,22 @@ namespace UnityGameFramework.Runtime
         }
 
         /// <summary>
+        /// 关闭前检测是否需要动效
+        /// </summary>
+        /// <param name="userData"></param>
+        public void OnCloseCheck(object userData)
+        {
+            try
+            {
+                m_UIFormLogic.OnCloseCheck(userData);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("UI form '[{0}]{1}' OnCloseCheck with exception '{2}'.", m_SerialId.ToString(), m_UIFormAssetName, exception.ToString());
+            }
+        }
+
+        /// <summary>
         /// 界面暂停。
         /// </summary>
         public void OnPause()

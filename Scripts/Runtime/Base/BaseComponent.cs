@@ -54,6 +54,8 @@ namespace UnityGameFramework.Runtime
         [SerializeField]
         private bool m_NeverSleep = true;
 
+        private bool _isCanChangeGameSpeed = true;
+        
         /// <summary>
         /// 获取或设置是否使用编辑器资源模式（仅编辑器内有效）。
         /// </summary>
@@ -119,9 +121,32 @@ namespace UnityGameFramework.Runtime
             }
             set
             {
-                Time.timeScale = m_GameSpeed = value >= 0f ? value : 0f;
+                if (_isCanChangeGameSpeed)
+                {
+                    Time.timeScale = m_GameSpeed = value >= 0f ? value : 0f;   
+                }
             }
         }
+
+        /// <summary>
+        /// 英雄展示界面禁止更改timescale
+        /// </summary>
+        public bool IsCanChangeGameSpeed
+        {
+            get
+            {
+                return _isCanChangeGameSpeed;
+            }
+            set
+            {
+                _isCanChangeGameSpeed = value;
+                if (!value && Time.timeScale == 0f)
+                {
+                    Time.timeScale = 1f;
+                }
+            }
+        }
+        
 
         /// <summary>
         /// 获取游戏是否暂停。

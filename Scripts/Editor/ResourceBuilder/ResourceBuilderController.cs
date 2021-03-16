@@ -1665,23 +1665,42 @@ namespace UnityGameFramework.Editor.ResourceTools
                 File.Delete(versionPath);
             }
 
-            File.WriteAllText(versionPath, LitJson.JsonMapper.ToJson(version));
+            File.WriteAllText(versionPath, ECS.Tools.LitJson.JsonMapper.ToJson(version));
         }
         
+        // 游戏启动之后 热更新校验时调用
         private void SaveBranchInfo()
         {
             var readAllText = File.ReadAllText(BuildInfoFilePath);
-            var buildInfoJson = LitJson.JsonMapper.ToObject<BuildInfo>(readAllText);
+            var buildInfoJson = ECS.Tools.LitJson.JsonMapper.ToObject<BuildInfo>(readAllText);
             buildInfoJson.Branch = Branch;
-            File.WriteAllText(BuildInfoFilePath, LitJson.JsonMapper.ToJson(buildInfoJson));
+            File.WriteAllText(BuildInfoFilePath, ECS.Tools.LitJson.JsonMapper.ToJson(buildInfoJson));
         }
 
-        public static void SaveVersionInfo(string path, string version)
+        // 打包时调用
+        public static void SaveVersionInfo(string path, string version, bool isAddGameVersion, string gameVersion)
         {
             var readAllText = File.ReadAllText(path);
-            var buildInfoJson = LitJson.JsonMapper.ToObject<BuildInfo>(readAllText);
+            var buildInfoJson = ECS.Tools.LitJson.JsonMapper.ToObject<BuildInfo>(readAllText);
             buildInfoJson.Version = version;
-            File.WriteAllText(path, LitJson.JsonMapper.ToJson(buildInfoJson));
+            buildInfoJson.GameVersion = gameVersion;
+            buildInfoJson.IosAppUrl = buildInfoJson.Branch.Contains("rel") || buildInfoJson.Branch.Contains("master")
+                ? "https://em.90km.com/"
+                : "https://gd.90km.com/";
+            buildInfoJson.AndroidAppUrl = "http://gd.90km.com:9999/";
+            
+            // add game version(暂时不用此功能，手动维护gameVersion)
+            /*if (isAddGameVersion)
+            {
+                var strings = buildInfoJson.GameVersion.Split('.');
+                if (strings.Length > 1)
+                {
+                    strings[1] += 1;
+                }
+                buildInfoJson.GameVersion = string.Join(".", strings);
+            }*/
+
+            File.WriteAllText(path, ECS.Tools.LitJson.JsonMapper.ToJson(buildInfoJson));
         }
 
         #endregion

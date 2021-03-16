@@ -107,7 +107,7 @@ namespace UnityGameFramework.Runtime
             }
 
             m_UIForm = GetComponent<UIForm>();
-            m_OriginalLayer = gameObject.layer;
+            //m_OriginalLayer = gameObject.layer;
         }
 
         /// <summary>
@@ -134,9 +134,18 @@ namespace UnityGameFramework.Runtime
         /// <param name="userData">用户自定义数据。</param>
         protected internal virtual void OnClose(bool isShutdown, object userData)
         {
-            gameObject.SetLayerRecursively(m_OriginalLayer);
+            //gameObject.SetLayerRecursively(m_OriginalLayer);
             Visible = false;
             m_Available = false;
+        }
+        
+        /// <summary>
+        /// 关闭前检测是否需要动效
+        /// </summary>
+        /// <param name="userData"></param>
+        protected internal virtual void OnCloseCheck(object userData)
+        {
+           
         }
 
         /// <summary>
